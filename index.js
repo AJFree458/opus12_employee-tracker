@@ -47,6 +47,7 @@ function directory() {
       choices: [
         "View All Employees, Departments, or Roles",
         "Add Employee, Department, or Role",
+        "Update an Employee Role",
         "EXIT"
       ]
     })
@@ -58,6 +59,10 @@ function directory() {
 
       case "Add Employee, Department, or Role":
         adder();
+        break;
+
+      case "Update an Employee Role":
+        updateRole();
         break;
       
       case "EXIT":
@@ -127,7 +132,9 @@ function adder() {
     });
 }
 
-
+function updateRole() {
+  
+}
 
 
 
