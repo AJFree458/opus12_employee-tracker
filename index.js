@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 const logo = require('asciiart-logo');
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: "localhost",
 
   // Your port; if not 3306
@@ -133,9 +133,18 @@ function adder() {
 }
 
 function updateEmployeeRole() {
-
+  const employeeArr = [];
   connection.query('SELECT first_name, last_name FROM employee', (err,res) => {
-
+    for( let i = 0; i < res.length; i++) {
+      let fullName = res[i].first_name + " " + res[i].last_name;
+      employeeArr.push(fullName);
+    }
+    inquirer.prompt([{
+      type: "list",
+      name: "employeeFullName",
+      message: "Which employee would you like to update the role for?",
+      choices: employeeArr
+    }]).then()
   });
 }
 
