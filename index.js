@@ -62,7 +62,7 @@ function directory() {
         break;
 
       case "Update an Employee Role":
-        updateRole();
+        updateEmployeeRole();
         break;
       
       case "EXIT":
@@ -132,8 +132,11 @@ function adder() {
     });
 }
 
-function updateRole() {
-  
+function updateEmployeeRole() {
+
+  connection.query('SELECT first_name, last_name FROM employee', (err,res) => {
+
+  });
 }
 
 
