@@ -152,6 +152,17 @@ function viewRoles() {
   });
 }
 
+function addEmployee() {
+
+}
+
+function addDepartment() {
+  
+}
+function addRole() {
+  
+}
+
 // function updateEmployeeRole() {
 //   const employeeArr = [];
 //   connection.query('SELECT first_name, last_name FROM employee', (err,res) => {
