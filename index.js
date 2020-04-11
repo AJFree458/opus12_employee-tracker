@@ -5,22 +5,18 @@ const logo = require('asciiart-logo');
 
 const connection = mysql.createConnection({
   host: "localhost",
-
   // Your port; if not 3306
   port: 3306,
-  
   // Your username
   user: "root",
-  
   // Your password
   password: "MaCgYvEr29>?",
-  database: "employeetracker_DB"
+  database: "employee_trackerDB"
 });
   
 connection.connect(function(err) {
   if (err) throw err;
   console.log("Connected as id " + connection.threadId);
-
   logoStart();
 });
   
@@ -47,7 +43,7 @@ function directory() {
       choices: [
         "View All Employees, Departments, or Roles",
         "Add Employee, Department, or Role",
-        "Update an Employee Role",
+        // "Update an Employee Role",
         "EXIT"
       ]
     })
@@ -132,30 +128,42 @@ function adder() {
     });
 }
 
-function updateEmployeeRole() {
-  const employeeArr = [];
-  connection.query('SELECT first_name, last_name FROM employee', (err,res) => {
-    for( let i = 0; i < res.length; i++) {
-      let fullName = res[i].first_name + " " + res[i].last_name;
-      employeeArr.push(fullName);
-    }
-    inquirer.prompt([{
-      type: "list",
-      name: "employeeFullName",
-      message: "Which employee would you like to update the role for?",
-      choices: employeeArr
-    }]).then()
+function viewEmployees() {
+  connection.query("SELECT * FROM employee", (err,res) => {
+    if (err) throw err;
+    console.table(res);
+    directory();
   });
 }
 
+function viewDepartments() {
+  connection.query("SELECT * FROM department", (err,res) => {
+    if (err) throw err;
+    console.table(res);
+    directory();
+  });
+}
 
+function viewRoles() {
+  connection.query("SELECT * FROM role", (err,res) => {
+    if (err) throw err;
+    console.table(res);
+    directory();
+  });
+}
 
-
-
-
-
-
-
-
-
-
+// function updateEmployeeRole() {
+//   const employeeArr = [];
+//   connection.query('SELECT first_name, last_name FROM employee', (err,res) => {
+//     for( let i = 0; i < res.length; i++) {
+//       let fullName = res[i].first_name + " " + res[i].last_name;
+//       employeeArr.push(fullName);
+//     }
+//     inquirer.prompt([{
+//       type: "list",
+//       name: "employeeFullName",
+//       message: "Which employee would you like to update the role for?",
+//       choices: employeeArr
+//     }]).then()
+//   });
+// }
