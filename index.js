@@ -174,7 +174,7 @@ function addEmployee() {
       type: "input",
       message: "Enter New Employee Manager ID (if applicable):",
       default: "NULL"
-    },
+    }
   ]).then(function(answer) {
     connection.query("INSERT INTO employee SET ?",
     {
@@ -191,11 +191,50 @@ function addEmployee() {
 }
 
 function addDepartment() {
-  
+  inquirer.prompt([
+    {
+      name: "department_name",
+      type: "input",
+      message: "Enter New Department Name:"
+    }
+  ]).then(function(answer) {
+    connection.query("INSERT INTO deparment SET ?", { name: answer.department_name }, function(err) {
+      if (err) throw err;
+      console.log("New Department Added! Thank you for your time!");
+      directory();
+    });
+  });
 }
 
 function addRole() {
-  
+  inquirer.prompt([
+    {
+      name: "title",
+      type: "input",
+      message: "Enter New Role Title:"
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "Enter Salary Amount:"
+    },
+    {
+      name: "deparment_id",
+      type: "input",
+      message: "Enter The Department ID Associated With This Role:"
+    }
+  ]).then(function(answer) {
+    connection.query("INSERT INTO employee SET ?",
+    {
+      title: answer.title,
+      salary: answer.salary,
+      department_id: answer.department_id
+    }, function(err) {
+      if (err) throw err;
+      console.log("New Role Added! Thank you for your time!");
+      directory();
+    });
+  });
 }
 
 // function updateEmployeeRole() {
