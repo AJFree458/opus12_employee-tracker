@@ -8,7 +8,7 @@ VALUES
 	("Software Engineer", 40000, 2), 
 	("Accountant", 60000, 3), 
 	("Legal Team Lead", 100000, 4), 
-	("Lawer", 75000, 4);
+	("Lawyer", 75000, 4);
 
 INSERT INTO department (name)
 VALUES 
