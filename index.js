@@ -45,6 +45,7 @@ function directory() {
         "Add Employee, Department, or Role",
         "Update an Employee Role",
         "Update an Employee Manager",
+        "View Employees By Manager",
         "EXIT"
       ]
     })
@@ -64,6 +65,10 @@ function directory() {
       
       case "Update an Employee Manager":
         updateEmployeeManager();
+        break;
+
+      case "View Employees By Manager":
+        viewEmployeeManager();
         break;
       
       case "EXIT":
@@ -308,6 +313,32 @@ function updateEmployeeManager() {
       }
     ]);
     console.log("Employee Role Updated!");
+    directory();
+  });
+}
+
+function viewEmployeeManager() {
+  // let manager = [];
+  // connection.query("SELECT id, first_name, last_name, manager_id FROM employee WHERE manager_id IS NULL", (err,res) => {
+    // if (err) throw err;
+    // console.log(res);
+    // for (let i = 0; i < res.length; i++) {
+    //   manager.push("ID: "res[i].id + ", " + "Name: " + res[i].first_name + " " + res[i].last_name);
+    // }
+    // console.log(manager);
+    // inquirer.prompt([
+    //   {
+    //     type: "list",
+    //     name: "managerName",
+    //     message: "What Manager Would You Like To View Employees By?",
+    //     choices: manager
+    //   }
+    // ]).then(function(res) {
+    //   connection.query("SELECT * FROM employee WHERE manager_id = { res.")
+    // })
+  connection.query("SELECT * FROM employee WHERE manager_id IS NOT NULL ORDER BY manager_id ", (err,res) => {
+    if (err) throw err;
+    console.table(res);
     directory();
   });
 }
