@@ -281,6 +281,54 @@ function addRole() {
   });
 }
 
+function deleteEmployee() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What Is The Employee's ID That You Wish To Delete?"
+    }
+  ]).then((answer) => {
+    connection.query("DELETE FROM employee WHERE ?", { id: answer.id }, function(err) {
+      if (err) throw err;
+      console.log("Delete Successful!");
+      directory();
+    });
+  });
+}
+
+function deleteDepartment() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What Is The Department's ID That You Wish To Delete?"
+    }
+  ]).then((answer) => {
+    connection.query("DELETE FROM department WHERE ?", { id: answer.id }, function(err) {
+      if (err) throw err;
+      console.log("Delete Successful!");
+      directory();
+    });
+  });
+}
+
+function deleteRole() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What Is The Role's ID That You Wish To Delete?"
+    }
+  ]).then((answer) => {
+    connection.query("DELETE FROM role WHERE ?", { id: answer.id }, function(err) {
+      if (err) throw err;
+      console.log("Delete Successful!");
+      directory();
+    });
+  });
+}
+
 function updateEmployeeRole() {
   inquirer.prompt([
     {
