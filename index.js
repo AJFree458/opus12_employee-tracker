@@ -26,9 +26,9 @@ function logoStart() {
     logo({ 
       name: "MYSQL EMPLOYEE TRACKER", 
       font: "Doom", 
-      borderColor: "grey", 
-      logoColor: "bold-blue", 
-      textColor: "blue" 
+      borderColor: "bold-green", 
+      logoColor: "bold-green", 
+      textColor: "bold-green" 
     }).render());
   directory();
 }
@@ -43,7 +43,8 @@ function directory() {
       choices: [
         "View All Employees, Departments, or Roles",
         "Add Employee, Department, or Role",
-        // "Update an Employee Role",
+        "Update an Employee Role",
+        "Update an Employee Manager",
         "EXIT"
       ]
     })
@@ -59,6 +60,10 @@ function directory() {
 
       case "Update an Employee Role":
         updateEmployeeRole();
+        break;
+      
+      case "Update an Employee Manager":
+        updateEmployeeManager();
         break;
       
       case "EXIT":
@@ -198,7 +203,7 @@ function addDepartment() {
       message: "Enter New Department Name:"
     }
   ]).then(function(answer) {
-    connection.query("INSERT INTO deparment SET ?", { name: answer.department_name }, function(err) {
+    connection.query("INSERT INTO department SET ?", { name: answer.department_name }, function(err) {
       if (err) throw err;
       console.log("New Department Added! Thank you for your time!");
       directory();
@@ -219,12 +224,12 @@ function addRole() {
       message: "Enter Salary Amount:"
     },
     {
-      name: "deparment_id",
+      name: "department_id",
       type: "input",
       message: "Enter The Department ID Associated With This Role:"
     }
   ]).then(function(answer) {
-    connection.query("INSERT INTO employee SET ?",
+    connection.query("INSERT INTO role SET ?",
     {
       title: answer.title,
       salary: answer.salary,
@@ -237,18 +242,72 @@ function addRole() {
   });
 }
 
-// function updateEmployeeRole() {
-//   const employeeArr = [];
-//   connection.query('SELECT first_name, last_name FROM employee', (err,res) => {
-//     for( let i = 0; i < res.length; i++) {
-//       let fullName = res[i].first_name + " " + res[i].last_name;
-//       employeeArr.push(fullName);
-//     }
-//     inquirer.prompt([{
-//       type: "list",
-//       name: "employeeFullName",
-//       message: "Which employee would you like to update the role for?",
-//       choices: employeeArr
-//     }]).then()
-//   });
-// }
+function updateEmployeeRole() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "first",
+      message: "What is the Employee to Update First Name?"
+    },
+    {
+      type: "input",
+      name: "last",
+      message: "What is the Employee to Update Last Name?"
+    },
+    {
+      type: "input",
+      name: "role_id",
+      message: "What is the Employee to Update New Role ID?"
+    }
+  ]).then((data) => {
+    connection.query("UPDATE employee SET ? WHERE ? and ?", 
+    [
+      {
+        role_id: data.role_id
+      },
+      {
+        first_name: data.first
+      },
+      {
+        last_name: data.last
+      }
+    ]);
+    console.log("Employee Role Updated!");
+    directory();
+  });
+}
+
+function updateEmployeeManager() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "first",
+      message: "What is the Employee to Update First Name?"
+    },
+    {
+      type: "input",
+      name: "last",
+      message: "What is the Employee to Update Last Name?"
+    },
+    {
+      type: "input",
+      name: "manager_id",
+      message: "What is the Employee to Update New Manager ID?"
+    }
+  ]).then((data) => {
+    connection.query("UPDATE employee SET ? WHERE ? and ?", 
+    [
+      {
+        manager_id: data.manager_id
+      },
+      {
+        first_name: data.first
+      },
+      {
+        last_name: data.last
+      }
+    ]);
+    console.log("Employee Role Updated!");
+    directory();
+  });
+}
