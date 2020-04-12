@@ -43,6 +43,7 @@ function directory() {
       choices: [
         "View All Employees, Departments, or Roles",
         "Add Employee, Department, or Role",
+        "Delete An Employee, Role or Department",
         "Update an Employee Role",
         "Update an Employee Manager",
         "View Employees By Manager",
@@ -57,6 +58,10 @@ function directory() {
 
       case "Add Employee, Department, or Role":
         adder();
+        break;
+
+      case "Delete An Employee, Role or Department":
+        deleter();
         break;
 
       case "Update an Employee Role":
@@ -133,6 +138,35 @@ function adder() {
       
       case "Add New Role":
         addRole();
+        break;
+      }
+    });
+}
+
+function deleter() {
+  inquirer
+    .prompt({
+      name: "action",
+      type: "list",
+      message: "What would you like to delete?",
+      choices: [
+        "Delete An Employee",
+        "Delete A Department",
+        "Delete A Role"
+      ]
+    })
+    .then(function(answer) {
+      switch (answer.action) {
+      case "Delete An Employee":
+        deleteEmployee();
+        break;
+
+      case "Delete A Department":
+        deleteDepartment();
+        break;
+      
+      case "Delete A Role":
+        deleteRole();
         break;
       }
     });
@@ -342,3 +376,4 @@ function viewEmployeeManager() {
     directory();
   });
 }
+
