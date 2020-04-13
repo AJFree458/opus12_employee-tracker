@@ -184,6 +184,13 @@ function viewEmployeesDepartmentsRoles(fromQuery) {
 
 
 function addEmployee() {
+  roleArr = [];
+  connection.query("SELECT title FROM role", function(err, res) {
+    if (err) throw err;
+    for( let i = 0; i < res.length; i++) {
+      roleArr.push(res[i].title);
+    }
+  })
   inquirer.prompt([
     {
       name: "first",
@@ -196,9 +203,10 @@ function addEmployee() {
       message: "Enter New Employee Last Name:"
     },
     {
-      name: "role_id",
-      type: "input",
-      message: "Enter New Employee Role ID:"
+      name: "role",
+      type: "list",
+      message: "Enter New Employee Role:",
+      choices: roleArr
     },
     {
       name: "manager_id",
@@ -206,18 +214,27 @@ function addEmployee() {
       message: "Enter New Employee Manager ID (if applicable):",
       default: "NULL"
     }
-  ]).then(function(answer) {
-    connection.query("INSERT INTO employee SET ?",
+  ]).then((answer) => {
+    let roleID;
+    console.log(answer);
+    connection.query("SELECT id AS role_id FROM role WHERE title = ?", `${answer.role}`, function(err, result) {
+      if (err) throw err;
+      console.log(result);
+      roleID = result[0].role_id;
+      console.log(roleID);
+      // return roleID;
+      connection.query("INSERT INTO employee SET ?",
     {
       first_name: answer.first,
       last_name: answer.last,
-      role_id: answer.role_id,
+      role_id: roleID,
       manager_id: answer.manager_id
     }, function(err) {
       if (err) throw err;
       console.log("New Employee Added! Thank you for your time!");
       directory();
     });
+    })
   });
 }
 
