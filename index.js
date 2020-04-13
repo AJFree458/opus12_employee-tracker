@@ -99,15 +99,15 @@ function viewer() {
     .then(function(answer) {
       switch (answer.action) {
       case "View All Employees":
-        viewEmployees();
+        viewEmployeesDepartmentsRoles("SELECT e.id, e.first_name, e.last_name, r.title, d.name, r.salary FROM employee AS e LEFT JOIN role AS r ON r.id = e.role_id LEFT JOIN department AS d ON d.id = r.department_id");
         break;
 
       case "View All Departments":
-        viewDepartments();
+        viewEmployeesDepartmentsRoles("SELECT * FROM department");
         break;
       
       case "View All Roles":
-        viewRoles();
+        viewEmployeesDepartmentsRoles("SELECT * FROM role");
         break;
       }
     });
@@ -172,29 +172,14 @@ function deleter() {
     });
 }
 
-function viewEmployees() {
-  connection.query("SELECT * FROM employee", (err,res) => {
+function viewEmployeesDepartmentsRoles(fromQuery) {
+  connection.query(fromQuery, (err,res) => {
     if (err) throw err;
     console.table(res);
     directory();
   });
 }
 
-function viewDepartments() {
-  connection.query("SELECT * FROM department", (err,res) => {
-    if (err) throw err;
-    console.table(res);
-    directory();
-  });
-}
-
-function viewRoles() {
-  connection.query("SELECT * FROM role", (err,res) => {
-    if (err) throw err;
-    console.table(res);
-    directory();
-  });
-}
 
 function addEmployee() {
   inquirer.prompt([
