@@ -101,7 +101,7 @@ function viewer() {
     .then(function(answer) {
       switch (answer.action) {
       case "View All Employees":
-        viewEmployeesDepartmentsRoles("SELECT e.id, e.first_name, e.last_name, r.title, d.name, r.salary FROM employee AS e LEFT JOIN role AS r ON r.id = e.role_id LEFT JOIN department AS d ON d.id = r.department_id");
+        viewEmployeesDepartmentsRoles("SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee AS e LEFT JOIN role AS r ON r.id = e.role_id LEFT JOIN department AS d ON d.id = r.department_id LEFT JOIN employee manager ON e.manager_id = manager.id");
         break;
 
       case "View All Departments":
