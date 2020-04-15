@@ -216,13 +216,12 @@ function addEmployee() {
     }
   ]).then((answer) => {
     let roleID;
-    console.log(answer);
+    // console.log(answer);
     connection.query("SELECT id AS role_id FROM role WHERE title = ?", `${answer.role}`, function(err, result) {
       if (err) throw err;
-      console.log(result);
+      // console.log(result);
       roleID = result[0].role_id;
-      console.log(roleID);
-      // return roleID;
+      // console.log(roleID);
       connection.query("INSERT INTO employee SET ?",
     {
       first_name: answer.first,
@@ -255,6 +254,13 @@ function addDepartment() {
 }
 
 function addRole() {
+  departmentArr = [];
+  connection.query("SELECT name FROM department", function(err, res) {
+    if (err) throw err;
+    for( let i = 0; i < res.length; i++) {
+      departmentArr.push(res[i].name);
+    }
+  })
   inquirer.prompt([
     {
       name: "title",
@@ -267,20 +273,28 @@ function addRole() {
       message: "Enter Salary Amount:"
     },
     {
-      name: "department_id",
-      type: "input",
-      message: "Enter The Department ID Associated With This Role:"
+      name: "departmentName",
+      type: "list",
+      message: "Enter Department Associated With This Role:",
+      choices: departmentArr
     }
   ]).then(function(answer) {
-    connection.query("INSERT INTO role SET ?",
+    let departmentID;
+    connection.query("SELECT id AS department_id FROM department WHERE name = ?", `${answer.departmentName}`, function(err, result) {
+      if (err) throw err;
+      // console.log(result);
+      departmentID = result[0].department_id;
+      // console.log(departmentID);
+      connection.query("INSERT INTO role SET ?",
     {
       title: answer.title,
       salary: answer.salary,
-      department_id: answer.department_id
+      department_id: departmentID
     }, function(err) {
       if (err) throw err;
       console.log("New Role Added! Thank you for your time!");
       directory();
+    });
     });
   });
 }
@@ -387,29 +401,25 @@ function updateEmployeeManager() {
     }
   ]).then((data) => {
     connection.query("UPDATE employee SET ? WHERE ? and ?", 
-    [
-      {
-        manager_id: data.manager_id
-      },
-      {
-        first_name: data.first
-      },
-      {
-        last_name: data.last
-      }
-    ]);
+    {
+      manager_id: data.manager_id, 
+      first_name: data.first, 
+      last_name: data.last
+    }, (err) => {
+      if (err) throw err;
+    });
     console.log("Employee Role Updated!");
     directory();
   });
 }
 
 function viewEmployeeManager() {
-  // let manager = [];
-  // connection.query("SELECT id, first_name, last_name, manager_id FROM employee WHERE manager_id IS NULL", (err,res) => {
+  // managerArr = [];
+  // connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err,res) => {
     // if (err) throw err;
     // console.log(res);
     // for (let i = 0; i < res.length; i++) {
-    //   manager.push("ID: "res[i].id + ", " + "Name: " + res[i].first_name + " " + res[i].last_name);
+    //   managerArr.push(res[i].first_name + " " + res[i].last_name);
     // }
     // console.log(manager);
     // inquirer.prompt([
@@ -417,10 +427,10 @@ function viewEmployeeManager() {
     //     type: "list",
     //     name: "managerName",
     //     message: "What Manager Would You Like To View Employees By?",
-    //     choices: manager
+    //     choices: managerArr
     //   }
-    // ]).then(function(res) {
-    //   connection.query("SELECT * FROM employee WHERE manager_id = { res.")
+    // ]).then(function(answer) {
+    //   connection.query("SELECT id FROM employee WHERE CONCAT(first_name ' ' last_name) = ?", )
     // })
   connection.query("SELECT * FROM employee WHERE manager_id IS NOT NULL ORDER BY manager_id ", (err,res) => {
     if (err) throw err;
@@ -428,4 +438,3 @@ function viewEmployeeManager() {
     directory();
   });
 }
-
