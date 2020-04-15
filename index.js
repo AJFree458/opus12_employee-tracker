@@ -414,27 +414,33 @@ function updateEmployeeManager() {
 }
 
 function viewEmployeeManager() {
-  // managerArr = [];
-  // connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err,res) => {
-    // if (err) throw err;
-    // console.log(res);
-    // for (let i = 0; i < res.length; i++) {
-    //   managerArr.push(res[i].first_name + " " + res[i].last_name);
-    // }
-    // console.log(manager);
-    // inquirer.prompt([
-    //   {
-    //     type: "list",
-    //     name: "managerName",
-    //     message: "What Manager Would You Like To View Employees By?",
-    //     choices: managerArr
-    //   }
-    // ]).then(function(answer) {
-    //   connection.query("SELECT id FROM employee WHERE CONCAT(first_name ' ' last_name) = ?", )
-    // })
-  connection.query("SELECT * FROM employee WHERE manager_id IS NOT NULL ORDER BY manager_id ", (err,res) => {
+  managerArr = [];
+  connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err, res) => {
     if (err) throw err;
-    console.table(res);
-    directory();
+    console.log(res);
+    for (let i = 0; i < res.length; i++) {
+      managerArr.push(res[i].first_name + " " + res[i].last_name);
+    }
+    console.log(managerArr);
+    inquirer.prompt([
+      {
+        type: "list",
+        name: "managerName",
+        message: "What Manager Would You Like To View Employees By?",
+        choices: managerArr
+      }
+    ]).then(function(answer) {
+      console.log(answer);
+      let managerID;
+      connection.query('SELECT id AS manager_id FROM employee WHERE CONCAT(first_name, " ", last_name) = ?', `${answer.managerName}`, function(err, result) {
+        if (err) throw err;
+        managerID = result[0].manager_id;
+        connection.query("SELECT first_name, last_name FROM employee WHERE manager_id = ?",managerID, (err,res) => {
+          if (err) throw err;
+          console.table(res);
+          directory();
+        });
+      });
+    });
   });
 }
