@@ -182,7 +182,6 @@ function viewEmployeesDepartmentsRoles(fromQuery) {
   });
 }
 
-
 function addEmployee() {
   roleArr = [];
   connection.query("SELECT title FROM role", function(err, res) {
@@ -307,7 +306,7 @@ function deleteEmployee() {
       message: "What Is The Employee's ID That You Wish To Delete?"
     }
   ]).then((answer) => {
-    connection.query("DELETE FROM employee WHERE id = ?", { id: answer.id }, function(err) {
+    connection.query("DELETE FROM employee WHERE id = ?", `${answer.id}`, function(err) {
       if (err) throw err;
       console.log("Delete Successful!");
       directory();
@@ -323,7 +322,7 @@ function deleteDepartment() {
       message: "What Is The Department's ID That You Wish To Delete?"
     }
   ]).then((answer) => {
-    connection.query("DELETE FROM department WHERE id = ?", { id: answer.id }, function(err) {
+    connection.query("DELETE FROM department WHERE id = ?", `${answer.id}`, function(err) {
       if (err) throw err;
       console.log("Delete Successful!");
       directory();
@@ -339,7 +338,7 @@ function deleteRole() {
       message: "What Is The Role's ID That You Wish To Delete?"
     }
   ]).then((answer) => {
-    connection.query("DELETE FROM role WHERE id = ?", { id: answer.id }, function(err) {
+    connection.query("DELETE FROM role WHERE id = ?", `${answer.id}`, function(err) {
       if (err) throw err;
       console.log("Delete Successful!");
       directory();
@@ -366,17 +365,11 @@ function updateEmployeeRole() {
     }
   ]).then((data) => {
     connection.query("UPDATE employee SET ? WHERE ? and ?", 
-    [
-      {
-        role_id: data.role_id
-      },
-      {
-        first_name: data.first
-      },
-      {
-        last_name: data.last
-      }
-    ]);
+    {
+      role_id: data.role_id,
+      first_name: data.first,
+      last_name: data.last
+    });
     console.log("Employee Role Updated!");
     directory();
   });
