@@ -144,7 +144,7 @@ function adder() {
       }
     });
 }
-
+// Direct user to the individual delete functions
 function deleter() {
   inquirer
     .prompt({
